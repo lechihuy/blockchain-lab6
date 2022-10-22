@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài 4 - Lab 6</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+</head>
+<body class="bg-slate-100">
+    <div class="flex items-center justify-center h-screen">
+        <form class="w-96 flex flex-col gap-4" id="form">
+            <p><a href="/" class="text-gray-700 underline">Trở về</a></p>
+            <h1 class="text-2xl">Bài 4</h1>
+
+            <select name="account" class="form-select w-full rounded"></select>
+
+            <div class="flex flex-col gap-1">
+                <label class="font-semibold">Hệ số a1, b1, c1</label>
+                <input type="text" name="m" class="form-text rounded" required placeholder="1 2 3">
+            </div>
+
+            <div class="flex flex-col gap-1">
+                <label class="font-semibold">Hệ số a2, b2, c2</label>
+                <input type="text" name="n" class="form-text rounded" required placeholder="4 5 6">
+            </div>
+
+            <button type="submit" id="submit" class="px-3 py-2 rounded bg-sky-500 text-white hover:bg-sky-600">Tính</button>
+
+            <div class="bg-white rounded border border-gray-300 p-5 hidden" id="result"></div>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            fetch('/accounts', {
+                'Content-Type': 'application/json'
+            })
+                .then(res => res.json())
+                .then(accounts => {
+                    accounts.forEach(account => {
+                        $('select[name=account]').append(`
+                        <option value="${account}">${account}</option>
+                        `);
+                    })
+                })
+        });
+
+        $('#form').submit(function(e) {
+            e.preventDefault();
+
+            const m = $('[name=m]').val().trim().split(' ');
+            const n = $('[name=n]').val().trim().split(' ');
+            const address = $('[name=account]').val().trim();
+
+            fetch('/bai4', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    m, n, address
+                })
+            }).then(res => res.json())
+            .then(res => {
+                $('#result').removeClass('hidden').html(`
+                    <p>${res.D != 0 ? 'Hệ phương trình có tập nghiệm' : (res.D == 0 && res.dx != 0 ? 'Hệ phương trình vô nghiệm' : 'Hệ phương trình có vô số nghiệm')}</p>
+                ` + (res.D != 0 ? `
+                    <p>x = ${res.x}</p>
+                    <p>y = ${res.y}</p>
+                ` : ''));
+            }).catch(err => {
+                $('#result').removeClass('hidden').html(`
+                    Đã có lỗi xảy ra!
+                `);
+            })
+        });
+    </script>
+</body>
+</html>
