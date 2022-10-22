@@ -4,25 +4,30 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bài 1 - Lab 6</title>
+    <title>Bài 2 - Lab 6</title>
     <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
 </head>
 <body class="bg-slate-100">
     <div class="flex items-center justify-center h-screen">
         <form class="w-96 flex flex-col gap-4" id="form">
             <p><a href="/" class="text-gray-700 underline">Trở về</a></p>
-            <h1 class="text-2xl">Bài 1</h1>
+            <h1 class="text-2xl">Bài 2</h1>
 
             <select name="account" class="form-select w-full rounded"></select>
 
             <div class="flex flex-col gap-1">
-                <label class="font-semibold">Số nguyên x</label>
-                <input type="number" name="x" step="1" class="form-text rounded" name="x" required>
+                <label class="font-semibold">Số nguyên a</label>
+                <input type="number" name="a" step="1" class="form-text rounded" name="x" required>
             </div>
 
             <div class="flex flex-col gap-1">
-                <label class="font-semibold">Số nguyên y</label>
-                <input type="number" name="y" step="1" class="form-text rounded" name="y" required>
+                <label class="font-semibold">Số nguyên b</label>
+                <input type="number" name="b" step="1" class="form-text rounded" name="y" required>
+            </div>
+
+            <div class="flex flex-col gap-1">
+                <label class="font-semibold">Số nguyên c</label>
+                <input type="number" name="c" step="1" class="form-text rounded" name="y" required>
             </div>
 
             <button type="submit" id="submit" class="px-3 py-2 rounded bg-sky-500 text-white hover:bg-sky-600">Tính</button>
@@ -37,25 +42,23 @@
         $('#form').submit(function(e) {
             e.preventDefault();
 
-            const x = $('[name=x]').val().trim();
-            const y = $('[name=y]').val().trim();
+            const a = $('[name=a]').val().trim();
+            const b = $('[name=b]').val().trim();
+            const c = $('[name=c]').val().trim();
             const address = $('[name=account]').val().trim();
 
-            fetch('/bai1', {
+            fetch('/bai2', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    x, y, address
+                    a, b, c, address
                 })
             }).then(res => res.json())
             .then(res => {
                 $('#result').removeClass('hidden').html(`
-                    <p>x + y = ${res.sum}</p>
-                    <p>x - y = ${res.subtract}</p>
-                    <p>x chia y lấy nguyên = ${res.integer}</p>
-                    <p>x chia y lấy dư = ${res.mod}</p>
+                   <p>${res.join(', ')}</p>
                 `);
             }).catch(err => {
                 $('#result').removeClass('hidden').html(`
