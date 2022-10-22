@@ -9,31 +9,58 @@
 </head>
 <body class="bg-slate-100">
     <div class="flex items-center justify-center h-screen">
-        <div class="w-96 flex flex-col gap-4">
+        <form class="w-96 flex flex-col gap-4" id="form">
             <h1 class="text-2xl">Bài 1</h1>
 
             <select name="account" class="form-select w-full rounded"></select>
 
             <div class="flex flex-col gap-1">
                 <label class="font-semibold">Số nguyên x</label>
-                <input type="number" name="x" step="1" class="form-text rounded" name="x">
+                <input type="number" name="x" step="1" class="form-text rounded" name="x" required>
             </div>
 
             <div class="flex flex-col gap-1">
                 <label class="font-semibold">Số nguyên y</label>
-                <input type="number" name="y" step="1" class="form-text rounded" name="y">
+                <input type="number" name="y" step="1" class="form-text rounded" name="y" required>
             </div>
 
-            <button type="button" id="submit" class="px-3 py-2 rounded bg-sky-500 text-white hover:bg-sky-600">Tính</button>
-        </div>
+            <button type="submit" id="submit" class="px-3 py-2 rounded bg-sky-500 text-white hover:bg-sky-600">Tính</button>
+
+            <div class="bg-white rounded border border-gray-300 p-5 hidden" id="result"></div>
+        </form>
     </div>
 
     <script src="https://code.jquery.com/jquery.min.js"></script>
     <script src="js/main.js"></script>
     <script>
-        $('#submit').click(function() {
+        $('#form').submit(function(e) {
+            e.preventDefault();
+
             const x = $('[name=x]').val().trim();
             const y = $('[name=y]').val().trim();
+            const address = $('[name=account]').val().trim();
+
+            fetch('/bai1', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    x, y, address
+                })
+            }).then(res => res.json())
+            .then(res => {
+                $('#result').removeClass('hidden').html(`
+                    <p>x + y = ${res.sum}</p>
+                    <p>x * y = ${res.multiply}</p>
+                    <p>x chia y lấy nguyên = ${res.integer}</p>
+                    <p>x chia y lấy dư = ${res.mod}</p>
+                `);
+            }).catch(err => {
+                $('#result').removeClass('hidden').html(`
+                    Đã có lỗi xảy ra!
+                `);
+            })
         });
     </script>
 </body>
