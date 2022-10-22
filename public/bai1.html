@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài 1 - Lab 6</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+</head>
+<body class="bg-slate-100">
+    <div class="flex items-center justify-center h-screen">
+        <div class="w-96 flex flex-col gap-4">
+            <h1 class="text-2xl">Bài 1</h1>
+
+            <select name="account" class="form-select w-full rounded"></select>
+
+            <div class="flex flex-col gap-1">
+                <label class="font-semibold">Số nguyên x</label>
+                <input type="number" name="x" step="1" class="form-text rounded" name="x">
+            </div>
+
+            <div class="flex flex-col gap-1">
+                <label class="font-semibold">Số nguyên y</label>
+                <input type="number" name="y" step="1" class="form-text rounded" name="y">
+            </div>
+
+            <button type="button" id="submit" class="px-3 py-2 rounded bg-sky-500 text-white hover:bg-sky-600">Tính</button>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery.min.js"></script>
+    <script src="js/main.js"></script>
+    <script>
+        $('#submit').click(function() {
+            const x = $('[name=x]').val().trim();
+            const y = $('[name=y]').val().trim();
+        });
+    </script>
+</body>
+</html>
