@@ -32,8 +32,21 @@
     </div>
 
     <script src="https://code.jquery.com/jquery.min.js"></script>
-    <script src="js/main.js"></script>
     <script>
+        $(document).ready(function() {
+            fetch('/accounts', {
+                'Content-Type': 'application/json'
+            })
+                .then(res => res.json())
+                .then(accounts => {
+                    accounts.forEach(account => {
+                        $('select[name=account]').append(`
+                        <option value="${account}">${account}</option>
+                        `);
+                    })
+                })
+        });
+
         $('#form').submit(function(e) {
             e.preventDefault();
 
