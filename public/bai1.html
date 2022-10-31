@@ -16,13 +16,8 @@
             <select name="account" class="form-select w-full rounded"></select>
 
             <div class="flex flex-col gap-1">
-                <label class="font-semibold">Số nguyên x</label>
-                <input type="number" name="x" step="1" class="form-text rounded" required>
-            </div>
-
-            <div class="flex flex-col gap-1">
-                <label class="font-semibold">Số nguyên y</label>
-                <input type="number" name="y" step="1" class="form-text rounded" required>
+                <label class="font-semibold">Nhập 5 số dưới dạng byte (cách nhau bởi khoảng trắng)</label>
+                <input type="text" name="bs" placeholder="0x7D 0x74 0xDD 0x58 0xD3" class="form-text rounded" required>
             </div>
 
             <button type="submit" id="submit" class="px-3 py-2 rounded bg-sky-500 text-white hover:bg-sky-600">Tính</button>
@@ -50,9 +45,13 @@
         $('#form').submit(function(e) {
             e.preventDefault();
 
-            const x = $('[name=x]').val().trim();
-            const y = $('[name=y]').val().trim();
+            const bs = $('[name=bs]').val().trim().split(' ').slice(0, 5);
             const address = $('[name=account]').val().trim();
+            const b1 = bs[0];
+            const b2 = bs[1];
+            const b3 = bs[2];
+            const b4 = bs[3];
+            const b5 = bs[4];
 
             fetch('/bai1', {
                 method: 'POST',
@@ -60,15 +59,12 @@
                     'Content-Type': 'application/json',
                 },
                 body: JSON.stringify({
-                    x, y, address
+                    b1, b2, b3, b4, b5, address
                 })
-            }).then(res => res.json())
+            }).then(res => res.text())
             .then(res => {
                 $('#result').removeClass('hidden').html(`
-                    <p>x + y = ${res.sum}</p>
-                    <p>x - y = ${res.subtract}</p>
-                    <p>x chia y lấy nguyên = ${res.integer}</p>
-                    <p>x chia y lấy dư = ${res.mod}</p>
+                    <p>Phần tử lớn nhất là: ${res}</p>
                 `);
             }).catch(err => {
                 $('#result').removeClass('hidden').html(`
